@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&display=swap');
+
+body {
+    background-image: linear-gradient(137deg, blue, green);
+    height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+}
+button {
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+}
+#container {
+    position: relative;
+    width: 340px;
+    height: 300px;
+    text-align: center;
+    left: 37%;
+    top: 30%;
+    background-color: blue;
+    border-radius: 16px;
+    color: #00ff00;
+}
+#google-login-btn {
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    padding: 20px;
+    font-size: 24px;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 10px;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 4px 8px 4px rgb(0, 0, 0);
+}
+#google-login-btn:hover {
+    background-color: #0b0b0bd2;
+    transform: scale(1.15);
+}
+#login-div {
+    display: none;
+}
+#password-input {
+    font-family: 'Montserrat', sans-serif;
+}

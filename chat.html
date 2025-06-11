@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KiwiChat</title>
+    <link rel="stylesheet" href="chatstyle.css">
+    <script src="script.js"></script>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD76INqaIh3T1gqh-E2gJciad9hgUSc8VM",
+            authDomain: "k-chat34.firebaseapp.com",
+            databaseURL: "https://k-chat34-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "k-chat34",
+            storageBucket: "k-chat34.firebasestorage.app",
+            messagingSenderId: "246382538428",
+            appId: "1:246382538428:web:035eb56823850195ddeab9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+            const welcomeElement = document.getElementById('welcome');
+            const messagesDiv = document.getElementById('messages');
+            const messageForm = document.getElementById('messageForm');
+            const messageInput = document.getElementById('messageInput');
+
+            if (username && welcomeElement) {
+                welcomeElement.textContent = `Welcome, ${username}!`;
+            }
+
+            // Listen for new messages
+            const messagesRef = ref(db, 'messages');
+            onValue(messagesRef, (snapshot) => {
+                messagesDiv.innerHTML = ''; // Clear messages
+                snapshot.forEach((childSnapshot) => {
+                    const message = childSnapshot.val();
+                    const messageElement = document.createElement('p');
+                    messageElement.textContent = `${message.username}: ${message.text}`;
+                    messagesDiv.appendChild(messageElement);
+                });
+            });
+
+            // Send a new message
+            messageForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const messageText = messageInput.value;
+                if (messageText.trim()) {
+                    push(messagesRef, {
+                        username: `${username}`,
+                        text: messageText
+                    });
+                    messageInput.value = ''; // Clear input
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>KiwiChat</h1>
+    <h2 id="welcome"></h2>
+    <div id="messages"></div>
+    <form id="messageForm">
+        <input type="text" id="messageInput" placeholder="Type your message..." required>
+        <button type="submit">Send</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.9.0/firebase-auth.js"></script>
+    <title>KiwiChat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD76INqaIh3T1gqh-E2gJciad9hgUSc8VM",
+            authDomain: "k-chat34.firebaseapp.com",
+            projectId: "k-chat34",
+            storageBucket: "k-chat34.firebasestorage.app",
+            messagingSenderId: "246382538428",
+            appId: "1:246382538428:web:035eb56823850195ddeab9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        const loginButton = document.getElementById('google-login-btn');
+        async function signInWithGoogle() {
+            try {
+                const result = await signInWithPopup(auth, provider); // Fixed variable name
+                const user = result.user;
+                console.log("User signed in:", user);
+
+                // Save user details in localStorage
+                localStorage.setItem("user", JSON.stringify({
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL
+                }));
+
+                // Display welcome message
+                const welcomeMessage = document.getElementById("welcomeMessage");
+                welcomeMessage.textContent = `Welcome, ${user.displayName}, Redirecting to chat...`;
+                setTimeout(() => {
+                    window.location.href = `chat.html?username=${user.displayName}`; // Redirect to chat page
+                }, 2000);
+            } catch (error) {
+                console.error("Error signing in with Google:", error);
+            }
+        };
+        window.signInWithGoogle = signInWithGoogle;
+    </script>
+    <script src="password.js" defer></script>
+</head>
+<body>
+    <div id="container">
+        <div id="password-div">
+            <h1>KiwiChat</h1>
+            <h2 style="color: red; font-family: 'Orbitron'; font-size: medium;">THIS WEBSITE IS LOCKED. PLEASE PUT IN THE PASSWORD TO CONTINUE.</h2>
+            <input id="password-input" placeholder="Password here!">
+            <button onclick="enterPassword()">Submit</button>
+            <p>If you don't know the password, and you are a student, please contact me at: <a href="mailto:kingkiwi34@outlook.com" style="color: chartreuse;">my email</a></p>
+        </div>
+        <div id="login-div">
+            <h1>KiwiChat</h1>
+            <p>Welcome to KiwiChat!</p>
+            <p>To get started, please login.</p>
+            <button id="google-login-btn" onclick="signInWithGoogle()">Login with <img src="assets/google.png" width="18" draggable="false"></button>
+            <p id="welcomeMessage"></p>
+        </div>
+    </div>
+</body>
+</html>
